@@ -44,9 +44,9 @@ export class HomePage implements OnInit {
 
     this.foodList = this.foodList.filter((currentFood) => {
       if (currentFood.name && searchTerm) {
-        return (
-          currentFood.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
-        );
+        return currentFood.name
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
       }
     });
   }

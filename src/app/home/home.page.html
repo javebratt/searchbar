@@ -5,10 +5,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-searchbar
-    showcancelbutton=""
-    (ionInput)="filterList($event)"
-  ></ion-searchbar>
+  <ion-searchbar (ionInput)="filterList($event)"></ion-searchbar>
 
   <ion-list lines="none">
     <ion-item *ngFor="let foodItem of foodList">
