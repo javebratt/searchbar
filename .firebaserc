@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "javebratt-examples": {
+      "hosting": {
+        "app": [
+          "javebratt-examples"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "javebratt-examples"
+  }
+}
