@@ -5,8 +5,9 @@ import {
   query,
   Firestore,
 } from '@angular/fire/firestore';
-import { first } from 'rxjs/operators';
-import { lastValueFrom } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -14,40 +15,35 @@ import { lastValueFrom } from 'rxjs';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  public foodList: any[];
-  public foodListBackup: any[];
+  public searchField: FormControl;
 
-  constructor(private readonly firestore: Firestore) {}
+  public foodList$: Observable<FoodItem[]>;
+
+  constructor(private readonly firestore: Firestore) {
+    this.searchField = new FormControl('');
+  }
 
   async ngOnInit() {
-    this.foodList = await this.initializeItems();
-  }
-
-  async initializeItems(): Promise<any> {
-    const foodListQuery = query(collection(this.firestore, 'foodList'));
-
-    const foodList: any[] = await lastValueFrom(
-      collectionData(foodListQuery).pipe(first())
+    const searchTerm$ = this.searchField.valueChanges.pipe(
+      startWith(this.searchField.value)
     );
 
-    this.foodListBackup = foodList;
-    return foodList;
+    const foodList$ = collectionData(
+      query(collection(this.firestore, 'foodList'))
+    ) as Observable<FoodItem[]>;
+
+    this.foodList$ = combineLatest([foodList$, searchTerm$]).pipe(
+      map(([foodList, searchTerm]) =>
+        foodList.filter(
+          (foodItem) =>
+            searchTerm === '' ||
+            foodItem.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      )
+    );
   }
+}
 
-  async filterList(evt) {
-    this.foodList = this.foodListBackup;
-    const searchTerm = evt.srcElement.value;
-
-    if (!searchTerm) {
-      return;
-    }
-
-    this.foodList = this.foodList.filter((currentFood) => {
-      if (currentFood.name && searchTerm) {
-        return currentFood.name
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase());
-      }
-    });
-  }
+interface FoodItem {
+  name: string;
 }

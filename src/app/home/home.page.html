@@ -5,10 +5,10 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-searchbar (ionInput)="filterList($event)"></ion-searchbar>
+  <ion-searchbar [formControl]="searchField" debounce="100"></ion-searchbar>
 
   <ion-list lines="none">
-    <ion-item *ngFor="let foodItem of foodList">
+    <ion-item *ngFor="let foodItem of foodList$ | async">
       <ion-label>{{ foodItem.name }}</ion-label>
     </ion-item>
   </ion-list>
