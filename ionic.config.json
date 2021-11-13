@@ -1,0 +1,7 @@
+{
+  "name": "Searchbar",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

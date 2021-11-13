@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "Searchbar",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
